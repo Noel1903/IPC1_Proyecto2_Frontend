@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <link href="{{url_for('static',filename='Estilos.css')}}" rel="stylesheet" >
+    <title>Iniciar Sesión</title>
+
+</head>
+<body style="background-color: #EB3C33;">
+    <img src="{{url_for('static',filename='paginaprincipal.jpg')}}" style="float:right;">
+    <div id="Iniciar">
+    <h1>Bienvenido</h1>
+    <form id="form1">
+    <input type="text" name="Usuario" size="100" maxlength="200" value="Usuario" onfocus="if(this.value=='Usuario')this.value=''" class="Usuario" >
+    <p></p>
+    <input type="text" name="Contraseña" size="100" maxlength="200" value="Contraseña" onfocus="if(this.value=='Contraseña')this.value=''" class="Contraseña" >
+    <p></p>
+    <a class="botonInicio" href="" onclick="obtener()">Iniciar Sesión</a>
+    </form>
+    <p></p>
+    
+    <hr>
+    &emsp;&emsp;&emsp;<a class="recuperarContraseña" href="">¿Olvidaste tu contraseña?</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    <a class="crearCuenta" href="./CrearCuenta.html">¿No tienes cuenta? Crea una cuenta</a>
+</div>
+<div id="mostrar">    </div>
+</body>
+<script>
+    function obtener()
+    {
+        var porUsuario=document.getElementsById('Usuario').value;
+        var porContraseña=document.getElementById('Contraseña').value;
+        let datos=[porUsuario,porContraseña];
+        
+    }
+</script>
+</html>

@@ -1,0 +1,104 @@
+
+div#Iniciar{
+    height: 300px;
+    width: 800px;
+    background-color: white;
+    margin: 20px;
+    border-radius: 12px;
+}
+
+div#Registro{
+    height: 350px;
+    width: 800px;
+    background-color: white;
+    margin: 20px;
+    border-radius: 12px;
+}
+h1{
+    font-family:Verdana, Geneva, Tahoma, sans-serif ;
+    color: gray;
+}
+.botonInicio{
+    text-decoration: none;
+    padding: 12px;
+    padding-left: 320px;
+    padding-right: 320px;
+    font-weight: 5000;
+    font-size: 20px;
+    color:white;
+    background-color:#EB3C33;
+    border-radius: 12px;
+}
+.botonInicio:hover{
+    color: #EB3C33;
+    background-color: white;
+    border: 2px solid #EB3C33;
+}
+.Registrar{
+    text-decoration: none;
+    padding: 12px;
+    padding-left: 320px;
+    padding-right: 320px;
+    font-weight: 5000;
+    font-size: 20px;
+    color:white;
+    background-color:#2733A0;
+    border-radius: 12px;
+}
+.Registrar:hover{
+    color: #2733A0;
+    background-color: white;
+    border: 2px solid #2733A0;
+}
+.Usuario{
+    border-color: #EB3C33;
+    padding: 10px;  
+    font-style: inherit;  
+    border-radius: 12px;
+
+}
+.UsuarioN{
+    border-color: #2733A0;
+    padding: 10px;  
+    font-style: inherit;  
+    border-radius: 12px;
+
+}
+.Contraseña{
+    border-color: #EB3C33;
+    padding: 10px;
+    border-radius: 12px;
+}
+.Nombre{
+    border-color: #2733A0;
+    padding: 10px;
+    border-radius: 12px;
+}
+.Apellido{
+    border-color: #2733A0;
+    padding: 10px;
+    border-radius: 12px;
+}
+.recuperarContraseña{
+    color: #EB3C33;
+    text-decoration: none;
+    font-size: 16px;
+    
+}
+.crearCuenta{
+    color: #EB3C33;
+    text-decoration: none;
+    font-size: 16px;
+
+}
+.IniciarSesion{
+    color: #2733A0;
+    text-decoration: none;
+    font-size: 16px;
+}
+ul{
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    background-color: #2733A0;
+}
