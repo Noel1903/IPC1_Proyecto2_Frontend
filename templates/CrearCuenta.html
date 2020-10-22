@@ -9,13 +9,43 @@
     <img src="{{url_for('static',filename='Registro.jpg')}}" style="float:right;">
     <div id="Registro">
     <h1>Crea una cuenta</h1>
-    <input type="text" size="46" maxlength="200" value="Nombre" onfocus="if(this.value=='Nombre')this.value=''" class="Nombre" >&emsp;&emsp;
-    <input type="text" size="46" maxlength="200" value="Apellido" onfocus="if(this.value=='Apellido')this.value=''" class="Apellido" ><p></p>
-    <input type="text" size="105" maxlength="200" value="Usuario" onfocus="if(this.value=='Usuario')this.value=''" class="UsuarioN" ><p></p>
-    <input type="text" size="46" maxlength="200" value="Contraseña" onfocus="if(this.value=='Contraseña')this.value=''" class="Nombre" >&emsp;&emsp;
-    <input type="text" size="46" maxlength="200" value="Confirmar Contraseña" onfocus="if(this.value=='Confirmar Contraseña')this.value=''" class="Apellido" ><p></p>
-    <a class="Registrar" href="">Registrar Usuario</a><p></p>
+    <input type="text"  id ="Nombre" size="46" maxlength="200"  placeholder="Nombre" class="Nombre" >&emsp;&emsp;
+    <input type="text" id ="Apellido"  size="46" maxlength="200"  placeholder="Apellido" class="Apellido" ><p></p>
+    <input type="text" id ="Usuario" size="105" maxlength="200" placeholder="Usuario"  class="UsuarioN" ><p></p>
+    <input type="text" id ="Contraseña" size="46" maxlength="200" placeholder="Contraseña"  class="Nombre" >&emsp;&emsp;
+    <input type="text" id ="ConfContra" size="46" maxlength="200" placeholder="Confirmar Contraseña"  class="Apellido" ><p></p>
+    <a class="Registrar"  onclick="Registrar()">Registrar Usuario</a><p></p>
     <a class="IniciarSesion" href="Index.html">¿Ya tienes una cuenta? Inicia Sesión</a>
     </div>
+
+
+    <script>
+        function Registrar(){
+            var nombre=document.querySelector('#Nombre').value
+            var apellido=document.querySelector('#Apellido').value
+            var usuario=document.querySelector('#Usuario').value
+            var contraseña=document.querySelector('#Contraseña').value
+            var datos={
+                'nombre':nombre,
+                'apellido':apellido,
+                'usuario':usuario,
+                'contraseña':contraseña
+            }
+            fetch('http://localhost:3000/Registrar/',{
+                method:'POST',
+                body:JSON.stringify(datos),
+                headers:{
+                    'Content-type':'application/json'
+                }
+            })
+            .then(respuesta=>{
+                alert(`Usuario Registrado Correctamente`)
+            })
+            location.href="localhost:5000"
+        } 
+           
+        </script>
+
 </body>
+
 </html>
