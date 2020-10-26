@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <title>CINELLA</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+		<style>
+            @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+        body{
+	    font-family: arial, helvetica;
+	    background: #092327;
+    }
+
+.menu{
+	list-style: none;
+	padding: 0;
+	background: #092327;
+	width: 100%;
+	max-width: 1500px;
+	
+    
+}
+
+
+.menu li a{
+	text-decoration: none;
+	color: white;
+	padding: 20px;
+	display: block;
+}
+.inic{
+    margin-left: 700px;
+}
+.inic1{
+    margin-left: 263px;
+}
+.in{
+    margin-right: 300px;
+}
+.menu li{
+	display: inline-block;
+	text-align: center;
+   
+}
+
+.menu li a:hover{
+	background: #06D500;
+}
+
+ </style>
+</head>
+	<body>
+		<ul class="menu">
+			<li class="inic"><a href="#"><i class="fas fa-photo-video"></i>Cartelera</a></li>
+			<li><a href="#"><i class="fas fa-ticket-alt"></i>Funciones</a></li>
+			<li><a href="#"><i class="fas fa-comment"></i>Reseñas</a></li>
+			<li><a href="#"><i class="fas fa-user-circle"></i>Perfil</a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a></li>
+        </ul>
+
+        <ul class="menu" style="margin-left: 0px;">
+			<li><a>Todas</a></li>
+            <li><a>De lo mejor a lo peor</a></li>
+            <li><a>De A-Z</a></li>
+            <li class="in"><a>De Z-A</a></li>
+            <li class="inic1">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" id="search" placeholder="Search..." size="30" style="height: 30px;" onkeyup="if(event.keyCode==13) funcion()"/>
+            </li>
+        </ul>
+        
+	</body>
+</html>

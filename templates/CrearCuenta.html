@@ -9,15 +9,17 @@
     <img src="{{url_for('static',filename='Registro.jpg')}}" style="float:right;">
     <div id="Registro">
     <h1>Crea una cuenta</h1>
+    <form id="formR">
     <input type="text"  id ="Nombre" size="46" maxlength="200"  placeholder="Nombre" class="Nombre" >&emsp;&emsp;
     <input type="text" id ="Apellido"  size="46" maxlength="200"  placeholder="Apellido" class="Apellido" ><p></p>
     <input type="text" id ="Usuario" size="105" maxlength="200" placeholder="Usuario"  class="UsuarioN" ><p></p>
-    <input type="text" id ="Contraseña" size="46" maxlength="200" placeholder="Contraseña"  class="Nombre" >&emsp;&emsp;
-    <input type="text" id ="ConfContra" size="46" maxlength="200" placeholder="Confirmar Contraseña"  class="Apellido" ><p></p>
+    <input type="password" id ="Contraseña" size="46" maxlength="200" placeholder="Contraseña"  class="Nombre" >&emsp;&emsp;
+    <input type="password" id ="ConfContra" size="46" maxlength="200" placeholder="Confirmar Contraseña"  class="Apellido" ><p></p>
     <a class="Registrar"  onclick="Registrar()">Registrar Usuario</a><p></p>
-    <a class="IniciarSesion" href="Index.html">¿Ya tienes una cuenta? Inicia Sesión</a>
+    </form><hr>
+    <a class="IniciarSesion" onclick="Iniciar()" href="">Si tiene cuenta creada, inicie sesión</a>
     </div>
-
+    
 
     <script>
         function Registrar(){
@@ -25,24 +27,38 @@
             var apellido=document.querySelector('#Apellido').value
             var usuario=document.querySelector('#Usuario').value
             var contraseña=document.querySelector('#Contraseña').value
-            var datos={
+            var confircontraseña=document.querySelector('#ConfContra').value
+            if(contraseña!=confircontraseña){
+                alert('La contraseña no es igual')
+            }
+            else{
+                var datos={
                 'nombre':nombre,
                 'apellido':apellido,
                 'usuario':usuario,
                 'contraseña':contraseña
-            }
-            fetch('http://localhost:3000/Registrar/',{
-                method:'POST',
-                body:JSON.stringify(datos),
-                headers:{
-                    'Content-type':'application/json'
                 }
-            })
-            .then(respuesta=>{
-                alert(`Usuario Registrado Correctamente`)
-            })
-            location.href="localhost:5000"
-        } 
+                console.log(datos)
+                fetch('http://localhost:3000/Registrar/',{
+                    method:'POST',
+                    body:JSON.stringify(datos),
+                    headers:{
+                    'Content-type':'application/json'
+                    }
+                })
+                .then(respuesta=>{
+                    alert(`Usuario Registrado Correctamente`)
+                    location.href="http://localhost:5000"
+                })
+
+            }
+            }
+            function Iniciar(){
+                location.href='http://localhost:5000';
+            }
+            
+     
+
            
         </script>
 

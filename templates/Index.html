@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html >
 <head>
     <meta charset="UTF-8">
     
@@ -12,27 +12,59 @@
     <div id="Iniciar">
     <h1>Bienvenido</h1>
     <form id="form1">
-    <input type="text" name="Usuario" size="100" maxlength="200" value="Usuario" onfocus="if(this.value=='Usuario')this.value=''" class="Usuario" >
+    <input type="text" id="User" name="Usuario" size="100" maxlength="200" placeholder="Usuario" class="Usuario" >
     <p></p>
-    <input type="text" name="Contraseña" size="100" maxlength="200" value="Contraseña" onfocus="if(this.value=='Contraseña')this.value=''" class="Contraseña" >
+    <input type="password" id="Contraseña" name="Contraseña" size="100" maxlength="200" placeholder="Contraseña" class="Contraseña" >
     <p></p>
-    <a class="botonInicio" href="" onclick="obtener()">Iniciar Sesión</a>
+    <a class="botonInicio" onclick="Iniciar()">Iniciar Sesión</a>
     </form>
     <p></p>
     
     <hr>
     &emsp;&emsp;&emsp;<a class="recuperarContraseña" href="">¿Olvidaste tu contraseña?</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-    <a class="crearCuenta" href="./CrearCuenta.html">¿No tienes cuenta? Crea una cuenta</a>
+    <a class="crearCuenta" onclick="Registrar()">¿No tienes cuenta? Crea una cuenta</a>
 </div>
 <div id="mostrar">    </div>
-</body>
+
+
 <script>
-    function obtener()
-    {
-        var porUsuario=document.getElementsById('Usuario').value;
-        var porContraseña=document.getElementById('Contraseña').value;
-        let datos=[porUsuario,porContraseña];
+    function Iniciar(){
+        var usuario=document.querySelector('#User').value
+        var contraseña=document.querySelector('#Contraseña').value
+        var datos={
+            'usuario':usuario,
+            'contraseña':contraseña
+        }
+        console.log(datos)
+        fetch('http://localhost:3000/IniciarSesion/',{
+            method:'POST',
+            body: JSON.stringify(datos),
+            headers: {
+            'Content-type':'application/json'
+            }
+        }).then(respuesta=>respuesta.json())
+        .catch(error=>{
+            alert('Ocurrio un error')
+        })
+        .then(resp=>{
+            if(resp.mensaje=="Error"){
+                alert("Error de Autenticación ")
+            }
+            else{
+                alert(`Bienvenido ${usuario}`)
+                if(usuario=="admin"){
+                    location.href="http://localhost:5000/Admin"
+                }
+            }
+        })
         
     }
+
+    function Registrar(){
+        location.href="http://localhost:5000/Registro"
+    }
+        
 </script>
+</body>
+
 </html>
