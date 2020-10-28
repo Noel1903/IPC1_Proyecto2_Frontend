@@ -219,8 +219,9 @@ th {
   function peliculas(){
     var agregar=document.querySelector("#Agregar")
     var componentes="<br><center><h1>Películas</h1></center><br>";
-    componentes+="<button id='button' class ='button' onclick='CargarPeliculas()'>Cargar Películas</button>"
-    componentes+="<input type='file' id='files' class='form-control' accept='.csv' required />"
+    componentes+="<button id='button' class ='button' onclick='CargarPeliculas()' >Cargar Películas</button>"
+    componentes+="<input type='file' id='files' class='form-control' accept='.csv' required /><br>"
+    componentes+="<button id='button' class ='button' onclick='mostrarpelis()' >Mostrar Peliculas</button>"
     componentes+="<table id='tabla' class='table' style='margin:auto;'> ";
     componentes+="<thead><tr><th>Título</th>";
     componentes+="<th>Imagen</th>";
@@ -316,16 +317,51 @@ th {
           'duracion':duracion,
           'sinopsis':sinopsis
         }
-        fetch('http://localhost/CargarPeliculas',{
+        fetch('http://localhost:3000/CargarPeliculas/',{
           method:'POST',
           body:JSON.stringify(pelicula),
           headers:{
             'Content-type':'application/json'
           }
         })
+        .then(respuesta=>respuesta.json())
+        .catch(err=>{
+          alert('Hubo un error')
+        })
+        .then(resp=>{
+          if(resp.mensaje=="Aceptado"){
+            
+          }
+        })
       }
+      
 
   }
+
+  function mostrarpelis(){
+    var agregarP=document.querySelector('#Films')
+
+      fetch('http://localhost:3000/TablaPeliculas/')
+      .then(respuesta=>respuesta.json())
+      .catch(err=>{
+        alert("Hubo un error en la muestra de peliculas")
+      })
+      .then(resp=>{  
+        console.log(resp) 
+        for(var i in resp){
+          agregarP.innerHTML+=`
+          <tr>
+          <th>${resp[i].titulo}</th>
+          <th>${resp[i].url}</th>
+          <th>${resp[i].puntuacion}</th>
+          <th>${resp[i].duracion}</th>
+          <th>${resp[i].sinopsis}</th>
+          </tr>`
+          }
+        })
+  }
+
+
 </script>
 </body>
 </html>

@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="UTF-8">
         <title>CINELLA</title>
-        <link rel="stylesheet" href="styles.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 		<style>
@@ -12,6 +11,9 @@
 	    font-family: arial, helvetica;
 	    background: #092327;
     }
+	p{
+		color: white;
+	}
 
 .menu{
 	list-style: none;
@@ -31,7 +33,7 @@
 	display: block;
 }
 .inic{
-    margin-left: 700px;
+    margin-left: 650px;
 }
 .inic1{
     margin-left: 263px;
@@ -49,11 +51,37 @@
 	background: #06D500;
 }
 
+.carteles{
+	width: 100%;
+	flex-wrap: wrap;
+}		
+.pelis{
+	flex:1;
+}	
+
+a[title]:hover {
+  position: relative;
+}
+ 
+a[title]:hover:after {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  padding: 4px;
+  background: grey;
+  white-space: nowrap;
+  z-index: 99;
+  transform: translateX(-50%);
+  content: attr(title);
+}
+
+
+
  </style>
 </head>
-	<body>
+<body onload="cartelera()">
 		<ul class="menu">
-			<li class="inic"><a href="#"><i class="fas fa-photo-video"></i>Cartelera</a></li>
+			<li class="inic" ><a href="#" ><i class="fas fa-photo-video"></i>Cartelera</a></li>
 			<li><a href="#"><i class="fas fa-ticket-alt"></i>Funciones</a></li>
 			<li><a href="#"><i class="fas fa-comment"></i>Reseñas</a></li>
 			<li><a href="#"><i class="fas fa-user-circle"></i>Perfil</a></li>
@@ -61,7 +89,7 @@
         </ul>
 
         <ul class="menu" style="margin-left: 0px;">
-			<li><a>Todas</a></li>
+			<li onclick="saludo()"><a>Todas</a></li>
             <li><a>De lo mejor a lo peor</a></li>
             <li><a>De A-Z</a></li>
             <li class="in"><a>De Z-A</a></li>
@@ -69,7 +97,38 @@
                 <span class="icon"><i class="fa fa-search"></i></span>
                 <input type="search" id="search" placeholder="Search..." size="30" style="height: 30px;" onkeyup="if(event.keyCode==13) funcion()"/>
             </li>
-        </ul>
-        
-	</body>
+		</ul>
+		<div id="carteles" class="carteles">
+			
+		</div>
+
+    <script>
+		function cartelera(){
+			var contener=document.querySelector("#carteles")
+			
+						
+		
+			fetch('http://localhost:3000/Cartelera/')
+			.then(respuesta=>respuesta.json())
+			.catch(error=>{
+				console.log("Procedimiento correcto")
+			})
+			.then(res=>{
+				console.log(res)
+				
+			
+				for (var i in res){
+					contener.innerHTML+=`<a title='${res[i].titulo}'><img src=${res[i].url_img} width='300px' height='450px'></a>`				
+      			}
+				
+			})
+		
+		}
+		function saludo(){
+			alert("La pagina dice hola")
+		}
+
+	</script>    
+</body>
+	
 </html>
