@@ -22,6 +22,8 @@
     
 
     <script>
+        var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
+		var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend
         function Registrar(){
             var nombre=document.querySelector('#Nombre').value
             var apellido=document.querySelector('#Apellido').value
@@ -39,7 +41,7 @@
                 'contraseña':contraseña
                 }
                 console.log(datos)
-                fetch('http://localhost:3000/Registrar/',{
+                fetch(direccion+'/Registrar/',{
                     method:'POST',
                     body:JSON.stringify(datos),
                     headers:{
@@ -48,13 +50,13 @@
                 })
                 .then(respuesta=>{
                     alert(`Usuario Registrado Correctamente`)
-                    location.href="http://localhost:5000"
+                    location.href=direccionW+"Login"
                 })
 
             }
             }
             function Iniciar(){
-                location.href='http://localhost:5000';
+                location.href=direccionW+"Login";
             }
             
      

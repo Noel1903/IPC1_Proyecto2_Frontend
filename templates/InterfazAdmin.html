@@ -31,7 +31,7 @@ body{
 .wrapper .sidebar{
   width: 250px;
   height: 100%;
-  background: #4b4276;
+  background: #4F0688;
   padding: 30px 0px;
   position: fixed;
 }
@@ -60,7 +60,7 @@ body{
 }
 
 .wrapper .sidebar ul li:hover{
-  background-color: #594f8d;
+  background-color: #7235A2;
 }
     
 .wrapper .sidebar ul li:hover a{
@@ -78,7 +78,7 @@ body{
 .wrapper .sidebar .social_media a{
   display: block;
   width: 40px;
-  background: #594f8d;
+  background: #7235A2;
   height: 40px;
   line-height: 45px;
   text-align: center;
@@ -125,7 +125,7 @@ body{
 .button {
   display: inline-block;
   border-radius: 4px;
-  background-color: #F50F00;
+  background-color: #FF8F00;
   border: none;
   color: #FFFFFF;
   text-align: center;
@@ -168,8 +168,62 @@ position: absolute;
 th {
   height: 50px;
 }
+.funciones,th,tr,td{
+  border: 1px solid black;
+  text-align: center;
+  font-size: 20px;
+}
+.funciones{
+  width: 60%;
+}
+.Editar{
+  background-color: green;
+  border: black;
+  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  border-radius: 3px;
+}
+.Eliminar{
+  background-color: red;
+  border: black;
+  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  border-radius: 3px;
+}
+label{
+  font-size: 25px;
+}
+.caja{
+  padding: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-left: 10px;
+  border-radius: 20px;
+  font-size: 18px;
+  width: 500px;
 
-
+}
+.caja1{
+  padding: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-left: 40px;
+  border-radius: 20px;
+  font-size: 18px;
+  width: 500px;
+}
+.x{
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: red;
+  border-radius: 20px;
+  color: white;
+}
 </style>
 </head>
 <body>
@@ -188,7 +242,7 @@ th {
             <li onclick="usuarios()" id="usuarios"><a href="#"><i class="fas fa-users"></i>Usuarios</a></li>
             <li onclick="registrar()"><a href="#"><i class="fas fa-user-plus"></i>Registrar Usuario</a></li>
             <li><a href="#"><i class="fas fa-user-circle"></i>Perfil</a></li>
-            
+            <li onclick="cerrar()"><a href="#"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a></li>
         </ul> 
         <div class="social_media">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -212,22 +266,26 @@ th {
  
 
 <script>
+  var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
+	var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend
   function funcion(){
-    location.href="http://localhost:5000"
+    location.href=direccionW
   }
   
   function peliculas(){
     var agregar=document.querySelector("#Agregar")
+    var contenedor=document.querySelector("#Agregar1")
+    contenedor.innerHTML=""
     var componentes="<br><center><h1>Películas</h1></center><br>";
     componentes+="<button id='button' class ='button' onclick='CargarPeliculas()' >Cargar Películas</button>"
     componentes+="<input type='file' id='files' class='form-control' accept='.csv' required /><br>"
     componentes+="<button id='button' class ='button' onclick='mostrarpelis()' >Mostrar Peliculas</button>"
     componentes+="<table id='tabla' class='table' style='margin:auto;'> ";
     componentes+="<thead><tr><th>Título</th>";
-    componentes+="<th>Imagen</th>";
     componentes+="<th>Puntuación</th>";
     componentes+="<th>Duración</th>";
-    componentes+="<th>Sinopsis</th>";
+    componentes+="<th>Editar</th>";
+    componentes+="<th>Eliminar</th>";
     componentes+="</tr></thead>";
     componentes+="<tbody id='Films'></tbody>"
     agregar.innerHTML=componentes
@@ -238,16 +296,99 @@ th {
   }
   function reseñas(){
     var agregar=document.querySelector("#Agregar")
+    var contenedor=document.querySelector("#Agregar1")
     agregar.innerHTML="<br><center><h1>Reseñas</h1></center><br>"
+
+
+    fetch(direccion+'/Reseñas/Ver')
+			.then(respuesta=>respuesta.json())
+			.catch(error=>{
+				alert("No hay reseñas para mostrar")
+			})
+			.then(resp=>{
+				console.log(resp)
+				for(var a in resp){
+					contenedor.innerHTML+=`
+					<h2>${resp[a].titulo}</h2>
+					<img src="https://images.vexels.com/media/users/3/135118/isolated/preview/676bf0e9f3c16649cd7f426c6dcd755a-signo-de-usuario-plana-con-fondo-redondo-by-vexels.png" width="70px" height="70px" class="img">
+       				<label class="label">${resp[a].usuario}</label>
+					<textarea rows="3" cols="100" disabled="disabled" id="comentario">${resp[a].reseña}</textarea><br>`
+				}
+				contener.innerHTML=""
+			})
 
   }
   function funciones(){
     var agregar=document.querySelector("#Agregar")
-    agregar.innerHTML="<br><center><h1>Funciones de películas</h1></center><br>"
-    var botonA=document.createElement("button");
-    botonA.innerHTML="Agregar Función";
-    botonA.className="button"
-    agregar.appendChild(botonA);
+    agregar.innerHTML=`<br><center><h1>Funciones de películas</h1></center><br>
+    <label>Pelicula:</label><input type="text" class="caja" id="Pelicula"><br>
+    <label>Hora:</label><input type="text" class="caja1" id="Hora"><br>
+    <button class="button" onclick="crearfuncion()">Agregar Función</button>`
+
+    var contenedor=document.querySelector("#Agregar1")
+    contenedor.innerHTML="<table style='margin:auto;'class='funciones'><thead><tr><th>Película</th><th>Estado</th><th>. . .</th></tr></thead><tbody id='funciones' class='funciones'></tbody></table>"
+    var contener=document.querySelector("#funciones")
+    fetch(direccion+'/Funciones/Ver')
+    .then(respuesta=>respuesta.json())
+    .catch(error=>{
+      console.log("Hubo un error")
+    })
+    .then(resp=>{
+      for(var i in resp){
+        if(resp[i].estado==true){
+          var estado="Disponible"
+        }
+        else{
+          var estado="No disponible"
+        }
+        contener.innerHTML+=`<tr>
+        <td>${resp[i].pelicula}</td>
+        <td>${estado}</td>
+        <td><button class="x">X</button></td></tr>`
+
+      }
+    })
+  }
+  function crearfuncion(){
+    var contener=document.querySelector("#funciones")
+    var pelicula=document.querySelector("#Pelicula").value
+    var hora=document.querySelector("#Hora").value
+    var datos={
+      'titulo':pelicula,
+      'hora':hora
+    }
+    console.log(datos)
+    fetch(direccion+'/Funciones',{
+      method:'POST',
+      body:JSON.stringify(datos),
+      headers:{
+        'Content-type':'application/json'
+      }
+    })
+    .then(respuesta=>respuesta.json())
+
+    .catch(error=>{
+      console.log("Hubo un error")
+    })
+    .then(resp=>{
+      console.log(resp)
+      if(resp.mensaje=="Correcto"){
+        alert("Funcion agregada correctamente")
+        if(resp.estado==true){
+          var estado="Disponible"
+        }
+        else{
+          var estado="No disponible"
+        }
+
+        contener.innerHTML+=`<tr>
+        <td>${pelicula}</td>
+        <td>${estado}</td>
+        <td><button class="x">X</button></td></tr>`
+       
+      }
+      
+    })
   }
   function usuarios(){
     var agregar=document.querySelector("#Agregar")
@@ -261,7 +402,7 @@ th {
     tablaU+="<tbody id='Users'></tbody>"
     agregar.innerHTML=tablaU
     tablaC=document.querySelector("#tabla")
-    fetch('http://localhost:3000/Obtener')
+    fetch(direccion+'/Obtener')
     .then(respuesta=>respuesta.json())
     .catch(error=>{
       alert("Hubo un error de carga de clientes")
@@ -275,6 +416,10 @@ th {
       
       }
     })
+
+    var contenedor=document.querySelector("#Agregar1")
+    contenedor.innerHTML=""
+
   }
   function registrar(){
     alert("El usuario que va crear va ser un Administrador")
@@ -317,7 +462,7 @@ th {
           'duracion':duracion,
           'sinopsis':sinopsis
         }
-        fetch('http://localhost:3000/CargarPeliculas/',{
+        fetch(direccion+'/CargarPeliculas/',{
           method:'POST',
           body:JSON.stringify(pelicula),
           headers:{
@@ -341,7 +486,7 @@ th {
   function mostrarpelis(){
     var agregarP=document.querySelector('#Films')
 
-      fetch('http://localhost:3000/TablaPeliculas/')
+      fetch(direccion+'/TablaPeliculas/')
       .then(respuesta=>respuesta.json())
       .catch(err=>{
         alert("Hubo un error en la muestra de peliculas")
@@ -352,13 +497,17 @@ th {
           agregarP.innerHTML+=`
           <tr>
           <th>${resp[i].titulo}</th>
-          <th>${resp[i].url}</th>
           <th>${resp[i].puntuacion}</th>
           <th>${resp[i].duracion}</th>
-          <th>${resp[i].sinopsis}</th>
+          <th><button class='Editar'>Editar</button></th>
+          <th><button class='Eliminar'>X</button></th>
           </tr>`
           }
         })
+  }
+
+  function cerrar(){
+    location.href=direccionW
   }
 
 

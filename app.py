@@ -7,6 +7,10 @@ CORS(app)
 def index():
     return render_template('Index.html')
 
+@app.route('/Login')
+def login():
+    return render_template('Login.html')  
+
 @app.route('/Registro')
 def registro():
     return render_template('CrearCuenta.html')

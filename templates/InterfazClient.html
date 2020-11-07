@@ -14,7 +14,20 @@
 	p{
 		color: white;
 	}
-
+	h1,h2,h3,h4{
+		color: white;
+		text-align: left;
+	}
+label{
+	color: white;
+	size: 20px;
+	font-size: 50px;
+}
+input[text]{
+	size: 100px;
+	width: 200px;
+	height: 100px;
+}
 .menu{
 	list-style: none;
 	padding: 0;
@@ -24,7 +37,9 @@
 	
     
 }
-
+section{
+	margin-left: 0%;
+}
 
 .menu li a{
 	text-decoration: none;
@@ -74,18 +89,90 @@ a[title]:hover:after {
   transform: translateX(-50%);
   content: attr(title);
 }
+textarea {
+    resize: none;
+    border-radius: 8px;
+}
+textarea[disabled]:disabled{
+	color: black;
+	background-color: white;
+}
+.img{
+    border-radius: 50px;
+}
+.comentar{
+	background-color: rgb(0, 132, 255);
+  border: black;
+  padding: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: white;
+  border-radius: 60px;
+}
+.coment{
+	margin-left: 10px;
+}
+.label{
+	color :white;
+	font-size: 16px;
+}
+.asistir{
+	padding:10px;
+	padding-right: 15px;
+	padding-right: 15px;
+	color:white;
+	background-color: green;
+}
 
-
+.pantalla{
+            text-decoration: none;
+            padding-left: 210px;
+            padding-right: 210px;
+            font-weight: 600;
+            font-size: 20px;
+            color: #ffffff;
+            background-color: #0061FF;
+            border-radius: 6px;
+            height: 20px;
+        }
+        .asientos{
+            align-items: center;
+            text-align: center;
+        }
+		
+        .asiento{
+            text-decoration:none;
+font-weight: 600;
+font-size: 20px;
+color:#000000;
+padding-top:15px;
+padding-bottom:15px;
+padding-left:40px;
+padding-right:40px;
+background-color: #adadad;
+border-radius: 10px;
+margin:20px;
+        }
+		.asien{
+			align-content: center;
+			text-align: center;
+			margin-left: 420px;
+		}
+		.asien{
+			padding: 15px;
+			padding-left: 15px;
+			padding-right: 15px;
+		}
 
  </style>
 </head>
 <body onload="cartelera()">
 		<ul class="menu">
-			<li class="inic" ><a href="#" ><i class="fas fa-photo-video"></i>Cartelera</a></li>
-			<li><a href="#"><i class="fas fa-ticket-alt"></i>Funciones</a></li>
-			<li><a href="#"><i class="fas fa-comment"></i>Reseñas</a></li>
-			<li><a href="#"><i class="fas fa-user-circle"></i>Perfil</a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a></li>
+			<li class="inic" onclick="cartelera()"><a href=" " ><i class="fas fa-photo-video"></i>Cartelera</a></li>
+			<li onclick="funciones()"><a href="#"><i class="fas fa-ticket-alt"></i>Funciones</a></li>
+			<li onclick="Reseñas()"><a href="#"><i class="fas fa-comment"></i>Reseñas</a></li>
+			<li onclick="Perfil()"><a href="#"><i class="fas fa-user-circle"></i>Perfil</a></li>
+            <li onclick="cerrar()"><a href="#"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a></li>
         </ul>
 
         <ul class="menu" style="margin-left: 0px;">
@@ -101,14 +188,22 @@ a[title]:hover:after {
 		<div id="carteles" class="carteles">
 			
 		</div>
+		<section id="reseñas"> 
+
+		</section><br>
+		<section id="coment" class="coment">
+
+		</section>
 
     <script>
+		var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
+		var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend
 		function cartelera(){
 			var contener=document.querySelector("#carteles")
 			
 						
 		
-			fetch('http://localhost:3000/Cartelera/')
+			fetch(direccion+'/Cartelera/')
 			.then(respuesta=>respuesta.json())
 			.catch(error=>{
 				console.log("Procedimiento correcto")
@@ -118,7 +213,7 @@ a[title]:hover:after {
 				
 			
 				for (var i in res){
-					contener.innerHTML+=`<a title='${res[i].titulo}'><img src=${res[i].url_img} width='300px' height='450px'></a>`				
+					contener.innerHTML+=`<a title='${res[i].titulo}' onclick="verpelicula('${res[i].titulo}')"><img src=${res[i].url_img} width='300px' height='450px'></a>`				
       			}
 				
 			})
@@ -126,6 +221,220 @@ a[title]:hover:after {
 		}
 		function saludo(){
 			alert("La pagina dice hola")
+		}
+
+		function verpelicula(titulo){
+			var contener=document.querySelector("#carteles")
+			var contener1=document.querySelector("#reseñas")
+			var peli={
+				'titulo':titulo
+			}
+			fetch(direccion+'/Cartelera/Ver',{
+				method:'POST',
+          		body: JSON.stringify(peli),
+         		headers:{
+           			'Content-type':'application/json'
+          		}
+			})
+			.then(respuesta=>respuesta.json())
+			.catch(err=>{
+				alert('Error de pelicula')
+			})
+			.then(res=>{
+				console.log(res)
+				contener.innerHTML=`<table><tr><th><img src=${res.url} width='300px' height='450px'></th>
+				<th><section><h1>${res.titulo}</h1>
+				<h3>Puntuación:${res.puntuacion}</h3>
+				<h4>Duración:${res.duracion}</h4>
+				<p>${res.sinopsis}</p></section></th></tr><br>`
+
+				contener1.innerHTML=`<img src="https://images.vexels.com/media/users/3/135118/isolated/preview/676bf0e9f3c16649cd7f426c6dcd755a-signo-de-usuario-plana-con-fondo-redondo-by-vexels.png" width="70px" height="70px" class="img">
+       			<textarea rows="3" cols="100" placeholder="Escribe tu opinión..." id="comentario"></textarea>
+        		<button type="button" onclick="coment('${res.titulo}')" onclick="saludo()" class="comentar"><i class="fas fa-paper-plane"></button><br>`
+					
+			})
+
+			var contenedor=document.querySelector("#coment")
+			
+			fetch(direccion+'/Reseñas/Ver')
+			.then(respuesta=>respuesta.json())
+			.catch(error=>{
+				console.log("Error")
+			})
+			.then(res=>{
+				console.log(res)
+				for(var i in res){
+					if(titulo==res[i].titulo){
+						contenedor.innerHTML+=`
+						<img src="https://images.vexels.com/media/users/3/135118/isolated/preview/676bf0e9f3c16649cd7f426c6dcd755a-signo-de-usuario-plana-con-fondo-redondo-by-vexels.png" width="70px" height="70px" class="img">
+       					<label class="label">${res[i].usuario}</label>
+						<textarea rows="3" cols="100" disabled="disabled" id="comentario">${res[i].reseña}</textarea><br>`	
+						
+					}
+					
+				}
+			})	
+
+		}
+		function funciones(){
+			var cont=document.querySelector("#carteles")
+			cont.innerHTML=""
+			var contener=document.querySelector("#carteles")
+			fetch(direccion+'/Funciones/Ver')
+			.then(respuesta=>respuesta.json())
+			.catch(err=>{
+				console.log("Hubo un error")
+			})
+			.then(resp=>{
+				for(var i in resp){
+					if(resp[i].estado){
+						var color="#0061FF"
+						contener.innerHTML+=`
+						<section style='background:${color}'>
+						<h3>${resp[i].pelicula}</h3>
+						<p>${resp[i].hora}</p>
+						<button class="asistir" align="right" onclick="asientos('${resp[i].pelicula}','${resp[i].hora}')">Asistir</button></section><br>`
+					}
+					else{
+						var color="#A1A1A1"
+						contener.innerHTML+=`
+						<section style='background:${color}'>
+						<h3>${resp[i].pelicula}</h3>
+						<p>${resp[i].hora}</p>
+						<p>FUNCION FINALIZADA</p></section><br>`
+					}
+				}
+			})
+		}
+
+		function asientos(pelicula,hora){
+			var contener=document.querySelector("#carteles")
+			contener.innerHTML=`
+			<section id="asientos" class="asientos">
+			<label>${pelicula}</label><br>
+			<label>${hora}</label><br>
+        <a class="pantalla">Pantalla</a><br><br>
+		
+        <table class="asien">
+            <tr>
+                <td><button id="asiento1" class="asiento" onclick="apartar('asiento1')">A-1</button></td>
+                <td><button id="asiento2" class="asiento" onclick="apartar('asiento2')">A-2</button></td>
+                <td><button id="asiento3" class="asiento" onclick="apartar('asiento3')">A-3</button></td>
+            </tr>
+            <tr>
+                <td><button id="asiento4" class="asiento" onclick="apartar('asiento4')">B-1</button></td>
+                <td><button id="asiento5" class="asiento" onclick="apartar('asiento5')">B-2</button></td>
+                <td><button id="asiento6" class="asiento" onclick="apartar('asiento6')">B-3</button></td>
+                <td><button class="asiento">Disponible</button></td>
+            </tr>
+            <tr>
+                <td><button id="asiento7"  class="asiento" onclick="apartar('asiento7')">C-1</button></td>
+                <td><button id="asiento8" class="asiento" onclick="apartar('asiento8')">C-2</button></td>
+                <td><button id="asiento9" class="asiento" onclick="apartar('asiento9')">C-3</button></td>
+                <td><button style="background-color: rgb(255, 50, 50);" class="asiento">Ocupado</button></td>
+            </tr>
+        </table>
+    </section>`
+			
+		}
+		function apartar(asiento){
+            document.getElementById(asiento).style.backgroundColor="rgb(255, 50, 50)";
+        }
+
+		function coment(pelicula){
+			
+			var user=sessionStorage.usuario
+			var reseña=document.querySelector("#comentario").value
+			var contener=document.querySelector("#coment")
+			var datos={
+				'titulo':pelicula,
+				'usuario':user,
+				'reseña':reseña
+			}
+
+			contener.innerHTML+=`
+			<img src="https://images.vexels.com/media/users/3/135118/isolated/preview/676bf0e9f3c16649cd7f426c6dcd755a-signo-de-usuario-plana-con-fondo-redondo-by-vexels.png" width="70px" height="70px" class="img">
+       		<label class="label">${user}</label>
+			<textarea rows="3" cols="100" disabled="disabled" id="comentario">${reseña}</textarea><br>`
+
+			fetch(direccion+'/Reseñas',{
+				method:'POST',
+          		body: JSON.stringify(datos),
+         		headers:{
+           			'Content-type':'application/json'
+          		}
+			})
+			.catch(err=>console.log("Error en guardar comentario"))
+			.then(respuesta=>console.log(datos))
+		
+			
+			var com=document.querySelector("#comentario").value=""
+
+
+		}
+		
+
+		function Perfil(){
+			var user=sessionStorage.usuario
+			
+			var contener=document.querySelector("#carteles")
+			var aux1=document.querySelector("#reseñas")
+			var aux2=document.querySelector("#coment")
+
+			aux1.innerHTML=""
+			aux2.innerHTML=""
+			var perfil={
+				'usuario':user
+			}
+			
+			fetch(direccion+'/verUsuario',{
+				method:'POST',
+          		body: JSON.stringify(perfil),
+         		headers:{
+           			'Content-type':'application/json'
+          		}
+			})
+			.then(respuesta=>respuesta.json())
+			.catch(error=>{
+				alert("Hubo un error de mostrar el usuario")
+			})
+			.then(res=>{
+				contener.innerHTML=`
+				<table><tr><td><img src='https://w7.pngwing.com/pngs/930/532/png-transparent-computer-icons-personal-web-page-user-name-icon-monochrome-user-tag.png' width='400px' height='400px'></td>
+				<td><section><label>Nombre:</label><br><input type='text' value=${res.nombre} style='height: 50px; font-size:25px;'><br>
+				<label>Apellido:</label><br><input type='text' value=${res.apellido} style='height: 50px; font-size:25px;'><br>
+				<label>Usuario:</label><br><input type='text' value=${res.usuario} style='height: 50px; font-size:25px;'><br></section>
+				</td></tr></table>`
+			})
+		}
+		function cerrar(){
+			alert("Gracias por visitarnos, vuelve pronto")
+			location.href=direccionW
+			
+		}
+		function Reseñas(){
+			var contenedor=document.querySelector("#carteles")
+			contenedor.innerHTML=""
+			var cont=document.querySelector("#coment")
+			cont.innerHTML=""
+			var contener=document.querySelector("#reseñas")
+			fetch(direccion+'/Reseñas/Ver')
+			.then(respuesta=>respuesta.json())
+			.catch(error=>{
+				alert("No hay reseñas para mostrar")
+			})
+			.then(resp=>{
+				console.log(resp)
+				for(var a in resp){
+					contenedor.innerHTML+=`
+					<h2>${resp[a].titulo}</h2>
+					<img src="https://images.vexels.com/media/users/3/135118/isolated/preview/676bf0e9f3c16649cd7f426c6dcd755a-signo-de-usuario-plana-con-fondo-redondo-by-vexels.png" width="70px" height="70px" class="img">
+       				<label class="label">${resp[a].usuario}</label>
+					<textarea rows="3" cols="100" disabled="disabled" id="comentario">${resp[a].reseña}</textarea><br>`
+				}
+				contener.innerHTML=""
+			})
+
 		}
 
 	</script>    

@@ -1,70 +1,98 @@
 <!DOCTYPE html>
-<html >
+<html>
 <head>
     <meta charset="UTF-8">
-    
-    <link href="{{url_for('static',filename='Estilos.css')}}" rel="stylesheet" >
-    <title>Iniciar Sesión</title>
-
-</head>
-<body style="background-color: #EB3C33;">
-    <img src="{{url_for('static',filename='paginaprincipal.jpg')}}" style="float:right;">
-    <div id="Iniciar">
-    <h1>Bienvenido</h1>
-    <form id="form1">
-    <input type="text" id="User" name="Usuario" size="100" maxlength="200" placeholder="Usuario" class="Usuario" >
-    <p></p>
-    <input type="password" id="Contraseña" name="Contraseña" size="100" maxlength="200" placeholder="Contraseña" class="Contraseña" >
-    <p></p>
-    <a class="botonInicio" onclick="Iniciar()">Iniciar Sesión</a>
-    </form>
-    <p></p>
-    
-    <hr>
-    &emsp;&emsp;&emsp;<a class="recuperarContraseña" href="">¿Olvidaste tu contraseña?</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-    <a class="crearCuenta" onclick="Registrar()">¿No tienes cuenta? Crea una cuenta</a>
-</div>
-<div id="mostrar">    </div>
-
-
-<script>
-    function Iniciar(){
-        var usuario=document.querySelector('#User').value
-        var contraseña=document.querySelector('#Contraseña').value
-        var datos={
-            'usuario':usuario,
-            'contraseña':contraseña
+    <title>CINELLA</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <style>
+         @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+        body{
+            background-color: #EFEFEF;
         }
-        console.log(datos)
-        fetch('http://localhost:3000/IniciarSesion/',{
-            method:'POST',
-            body: JSON.stringify(datos),
-            headers: {
-            'Content-type':'application/json'
-            }
-        }).then(respuesta=>respuesta.json())
-        .catch(error=>{
-            alert('Ocurrio un error')
-        })
-        .then(resp=>{
-            if(resp.mensaje=="Error"){
-                alert("Error de Autenticación ")
-            }
-            else{
-                alert(`Bienvenido ${usuario}`)
-                if(usuario=="admin"){
-                    location.href="http://localhost:5000/Admin"
-                }
-            }
-        })
-        
-    }
+        p{
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: justify;
+        }
+        .barra{
+            list-style: none;
+	        padding: 0;
+	        background: #3E4AB8;
+	        width: 100%;
+	        max-width: 1000px;
+        }
+        .barra li{
+            display: inline-block;
+	        text-align: center;
+        }
+        .barra li a:hover{
+	        background: black;
+        }
+        .barra li a{
+            text-decoration: none;
+	        color: white;
+	        padding: 20px;
+	        display: block;
+            padding-left: 40px;
+            padding-right: 40px;
+            font-size: 20px;
+        }
+        .pie{
+            background-color: #505050;
+        }
+    
 
-    function Registrar(){
-        location.href="http://localhost:5000/Registro"
-    }
-        
-</script>
+.carteles1:hover {
+    -webkit-transform:scale(1.10);
+    -moz-transform:scale(1.10);
+    -ms-transform:scale(1.10);
+    -o-transform:scale(1.10);
+    transform:scale(1.10);
+}
+
+    </style>
+</head>
+<body>
+    <section> 
+        <img src="{{url_for('static',filename='Index.JPG')}}" width="450px" height="120px" onclick="cinella()">      
+        <div style="float: right;">
+            <ul id="barra" class="barra">
+                <li onclick="iniciar()"><a><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a></li>
+                <li onclick="acerca()"><a><i class="fas fa-info"></i> Acerca de</a></li>
+                <li><a><i class="fas fa-id-badge"></i> Contáctenos</a></li>
+            </ul>
+        </div> 
+    </section><br><br>
+    <div id="informacion"></div>  
+    <section id="carteles" class="carteles" align="center">
+        <img src="{{url_for('static',filename='Promocion2.jpg')}}" width="1000px" height="600px" class="carteles1"><br><br>
+        <img src="{{url_for('static',filename='Promocion3.jpg')}}" width="1000px" height="600px" class="carteles1"><br><br>
+        <img src="{{url_for('static',filename='Promocion1.jpg')}}" width="1000px" height="600px" class="carteles1"><br><br>
+    </section><br><br>
+    <section class="pie">
+        <br><br><br><br><br><br><br><br><br>
+    </section>
+
+    <script>
+        var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
+		var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend
+        function iniciar(){
+            location.href=direccionW+"Login"
+        }
+        function acerca(){
+            var contener=document.querySelector("#informacion")
+            contener.innerHTML=`
+            <h1>Acerca de CINELLA</h1>
+            <p>Somos un centro de entretenimiento audiovisual cinematografico donde presentamos
+            tus peliculas favoritas al mejor precio para que la disfrutes con la mayor comodidad
+            que ofrecemos en nuestras instalaciones, con formatos 2D, 3D, Almost, tambien ofrecemos variedad
+            de películas que busca entretener al mas pequeño de la familia hasta el mas grande. </p><br><br>`
+        }
+        function cinella(){
+            location.href=direccionW
+        }
+    </script>
 </body>
-
 </html>
