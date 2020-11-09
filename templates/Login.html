@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    
+    <link href="{{url_for('static',filename='Estilos.css')}}" rel="stylesheet" >
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+</head>
+<body style="background-color: #EB3C33;">
+    <img src="{{url_for('static',filename='paginaprincipal.jpg')}}" style="float:right;">
+    <div id="Iniciar">
+    <h1>Bienvenido</h1>
+    <form id="form1">
+    <input type="text" id="User" name="Usuario" size="100" maxlength="200" placeholder="Usuario" class="Usuario" >
+    <p></p>
+    <input type="password" id="Contraseña" name="Contraseña" size="100" maxlength="200" placeholder="Contraseña" class="Contraseña" >
+    <p></p>
+    <a class="botonInicio" onclick="Iniciar()">Iniciar Sesión</a>
+    </form>
+    <p></p>
+    
+    <hr>
+    &emsp;&emsp;&emsp;<a class="recuperarContraseña"  onclick="recuperar()">¿Olvidaste tu contraseña?</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    <a class="crearCuenta" onclick="Registrar()">¿No tienes cuenta? Crea una cuenta</a>
+
+
+    <div id="recuperar"></div>
+
+</div>
+<div id="mostrar"></div>
+
+
+<script>
+
+        var direccion="https://backendcinella.herokuapp.com" //Aqui esta la direccion para cambiarla a Heroku de backend
+		var direccionW="https://cinemacinella.herokuapp.com" //Aqui es la direccion del Frontend    
+    function Iniciar(){
+        var usuario=document.querySelector('#User').value
+        var contraseña=document.querySelector('#Contraseña').value
+        var datos={
+            'usuario':usuario,
+            'contraseña':contraseña
+        }
+                
+        fetch(direccion+'/IniciarSesion/',{
+            method:'POST',
+            body: JSON.stringify(datos),
+            headers: {
+            'Content-type':'application/json'
+            }
+        }).then(respuesta=>respuesta.json())
+        .catch(error=>{
+            alert('Ocurrio un error')
+        })
+        .then(resp=>{
+            if(resp.mensaje=="Error"){
+                alert("Error de Autenticación ")
+            }
+            else{
+                alert(`Bienvenido ${usuario}`)
+                sessionStorage.setItem("usuario",usuario)
+                
+                if(resp.tipo=="administrador"){
+                    location.href=direccionW+"/Admin"
+                }
+                if(resp.tipo=="Cliente"){
+                    location.href=direccionW+"/Cliente"
+                }
+            }
+        })
+        
+    }
+
+    function Registrar(){
+        location.href=direccionW+"/Registro"
+    }
+
+    function recuperar(){
+        var contener=document.querySelector("#mostrar")
+        contener.innerHTML=`
+        <label>Ingrese su usuario para poder recuperar sus contraseña</label>
+        <input type="text" id="usuario" name="Usuario" size="100" maxlength="200" placeholder="Usuario" class="Usuario" ><br><br><br>
+        <a class="botonInicio" onclick="mostrarcontra()">Recuperar Contraseña</a>`
+    }
+    function mostrarcontra(){
+        var user=document.querySelector("#usuario").value
+        var dato={
+            'usuario':user
+        }
+        fetch(direccion+'/Recuperar',{
+            method:'POST',
+            body: JSON.stringify(dato),
+            headers: {
+            'Content-type':'application/json'
+            }
+        })
+        .then(respuesta=>respuesta.json())
+        .catch(error=>{
+            alert("Datos erroneos")
+        })
+        .then(resp=>{
+            if(resp.mensaje=="correcto"){
+                alert(`Su contraseña es: ${resp.contraseña}`)
+                var contenedor=document.querySelector("#mostrar")
+                contenedor.innerHTML=""
+            }
+            
+        })
+    }
+        
+</script>
+</body>
+
+</html>
