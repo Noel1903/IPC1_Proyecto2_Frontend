@@ -163,6 +163,15 @@ margin:20px;
 			padding-left: 15px;
 			padding-right: 15px;
 		}
+		.modificar{
+			background-color: green;
+  border: black;
+  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  border-radius: 3px;
+		}
 
  </style>
 </head>
@@ -175,16 +184,7 @@ margin:20px;
             <li onclick="cerrar()"><a href="#"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a></li>
         </ul>
 
-        <ul class="menu" style="margin-left: 0px;">
-			<li onclick="saludo()"><a>Todas</a></li>
-            <li><a>De lo mejor a lo peor</a></li>
-            <li><a>De A-Z</a></li>
-            <li class="in"><a>De Z-A</a></li>
-            <li class="inic1">
-                <span class="icon"><i class="fa fa-search"></i></span>
-                <input type="search" id="search" placeholder="Search..." size="30" style="height: 30px;" onkeyup="if(event.keyCode==13) funcion()"/>
-            </li>
-		</ul>
+        
 		<div id="carteles" class="carteles">
 			
 		</div>
@@ -197,7 +197,7 @@ margin:20px;
 
     <script>
 		var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
-		var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend
+		var direccionW="http://localhost:5000" //Aqui es la direccion del Frontend
 		function cartelera(){
 			var contener=document.querySelector("#carteles")
 			
@@ -317,28 +317,60 @@ margin:20px;
 		
         <table class="asien">
             <tr>
-                <td><button id="asiento1" class="asiento" onclick="apartar('asiento1')">A-1</button></td>
-                <td><button id="asiento2" class="asiento" onclick="apartar('asiento2')">A-2</button></td>
-                <td><button id="asiento3" class="asiento" onclick="apartar('asiento3')">A-3</button></td>
+                <td><button id="asiento1" class="asiento" onclick="apartar('asiento1','${pelicula}','${hora}')">A-1</button></td>
+                <td><button id="asiento2" class="asiento" onclick="apartar('asiento2','${pelicula}','${hora}')">A-2</button></td>
+                <td><button id="asiento3" class="asiento" onclick="apartar('asiento3','${pelicula}','${hora}')">A-3</button></td>
             </tr>
             <tr>
-                <td><button id="asiento4" class="asiento" onclick="apartar('asiento4')">B-1</button></td>
-                <td><button id="asiento5" class="asiento" onclick="apartar('asiento5')">B-2</button></td>
-                <td><button id="asiento6" class="asiento" onclick="apartar('asiento6')">B-3</button></td>
+                <td><button id="asiento4" class="asiento" onclick="apartar('asiento4','${pelicula}','${hora}')">B-1</button></td>
+                <td><button id="asiento5" class="asiento" onclick="apartar('asiento5','${pelicula}','${hora}')">B-2</button></td>
+                <td><button id="asiento6" class="asiento" onclick="apartar('asiento6','${pelicula}','${hora}')">B-3</button></td>
                 <td><button class="asiento">Disponible</button></td>
             </tr>
             <tr>
-                <td><button id="asiento7"  class="asiento" onclick="apartar('asiento7')">C-1</button></td>
-                <td><button id="asiento8" class="asiento" onclick="apartar('asiento8')">C-2</button></td>
-                <td><button id="asiento9" class="asiento" onclick="apartar('asiento9')">C-3</button></td>
+                <td><button id="asiento7"  class="asiento" onclick="apartar('asiento7','${pelicula}','${hora}')">C-1</button></td>
+                <td><button id="asiento8" class="asiento" onclick="apartar('asiento8','${pelicula}','${hora}')">C-2</button></td>
+                <td><button id="asiento9" class="asiento" onclick="apartar('asiento9','${pelicula}','${hora}')">C-3</button></td>
                 <td><button style="background-color: rgb(255, 50, 50);" class="asiento">Ocupado</button></td>
             </tr>
-        </table>
-    </section>`
+        	</table>
+    		</section>`;
 			
+			fetch(direccion+'/Asientos/Apartados')
+			.then(respuesta=>respuesta.json())
+			.catch(err=>{
+				console.log("Error al obtener los asientos")
+			})
+			.then(resp=>{
+				for(var i in resp){
+					if(resp[i].pelicula==pelicula && resp[i].hora==hora){
+						document.getElementById(resp[i].asiento).style.backgroundColor="rgb(255, 50, 50)"
+					}
+				}
+			})
 		}
-		function apartar(asiento){
+		function apartar(asiento,pelicula,hora){
+			var boton=document.getElementById(asiento)
+			if(boton.style.backgroundColor=="rgb(255, 50, 50)"){
+				alert("Este asiento ya esta ocupado")
+			}
             document.getElementById(asiento).style.backgroundColor="rgb(255, 50, 50)";
+			var datos={
+				'pelicula':pelicula,
+				'asiento':asiento,
+				'hora':hora
+			}
+			fetch(direccion+'/Asientos',{
+				method:'POST',
+          		body: JSON.stringify(datos),
+         		headers:{
+           			'Content-type':'application/json'
+          		}
+			})
+			.catch(error=>{
+				console.log("Hubo un error")
+			})
+			
         }
 
 		function coment(pelicula){
@@ -401,12 +433,49 @@ margin:20px;
 			.then(res=>{
 				contener.innerHTML=`
 				<table><tr><td><img src='https://w7.pngwing.com/pngs/930/532/png-transparent-computer-icons-personal-web-page-user-name-icon-monochrome-user-tag.png' width='400px' height='400px'></td>
-				<td><section><label>Nombre:</label><br><input type='text' value=${res.nombre} style='height: 50px; font-size:25px;'><br>
-				<label>Apellido:</label><br><input type='text' value=${res.apellido} style='height: 50px; font-size:25px;'><br>
-				<label>Usuario:</label><br><input type='text' value=${res.usuario} style='height: 50px; font-size:25px;'><br></section>
+				<td><section><label>Nombre:</label><br><input  id="nombre" type='text' value=${res.nombre} style='height: 50px; font-size:25px;'><br>
+				<label>Apellido:</label><br><input type='text' id="apellido" value=${res.apellido} style='height: 50px; font-size:25px;'><br>
+				<label>Usuario:</label><br><input type='text' id="usuario" value=${res.usuario} style='height: 50px; font-size:25px;'><br>
+				<label>Contraseña:</label><br><input type='text' id="contraseña" value=${res.contraseña} style='height: 50px; font-size:25px;'><br>
+				<button class="modificar" onclick="modificar('${res.usuario}')">Modificar</button></section>
 				</td></tr></table>`
 			})
 		}
+
+		function modificar(usuario){
+			var nombre=document.querySelector("#nombre").value
+			var apellido=document.querySelector("#apellido").value
+			var usuarioN=document.querySelector("#usuario").value
+			var contraseña=document.querySelector("#contraseña").value
+			var datos={
+				'usuario':usuario,
+				'nombre':nombre,
+				'apellido':apellido,
+				'usuarioN':usuarioN,
+				'contraseña':contraseña
+			}
+			fetch(direccion+'/Modificarperfil',{
+				method:'POST',
+          		body: JSON.stringify(datos),
+         		headers:{
+           			'Content-type':'application/json'
+          		}
+			})
+			.then(respuesta=>respuesta.json())
+			.catch(err=>{
+				console.log("Hubo un error")
+			})
+			.then(resp=>{
+				if(resp.mensaje=="correcto"){
+					alert("Perfil modificado correctamente")
+					sessionStorage.setItem("usuario",usuarioN)
+				}
+				if(resp.mensaje=="Error"){
+					alert("Este usuario ya esta usado")
+				}
+			})
+		}
+
 		function cerrar(){
 			alert("Gracias por visitarnos, vuelve pronto")
 			location.href=direccionW

@@ -59,9 +59,10 @@
         <img src="{{url_for('static',filename='Index.JPG')}}" width="450px" height="120px" onclick="cinella()">      
         <div style="float: right;">
             <ul id="barra" class="barra">
-                <li onclick="iniciar()"><a><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a></li>
+                <li onclick="iniciar()"><a><i class="fas fa-sign-in-alt"></i>Iniciar Sesión</a></li>
+                <li onclick="registrar()"><a><i class="fas fa-user"></i>Registrarse</a></li>
                 <li onclick="acerca()"><a><i class="fas fa-info"></i> Acerca de</a></li>
-                <li><a><i class="fas fa-id-badge"></i> Contáctenos</a></li>
+                <li onclick="contactenos()"><a><i class="fas fa-id-badge"></i> Contáctenos</a></li>
             </ul>
         </div> 
     </section><br><br>
@@ -77,9 +78,9 @@
 
     <script>
         var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
-		var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend
+		var direccionW="http://localhost:5000" //Aqui es la direccion del Frontend
         function iniciar(){
-            location.href=direccionW+"Login"
+            location.href=direccionW+"/Login"
         }
         function acerca(){
             var contener=document.querySelector("#informacion")
@@ -92,6 +93,22 @@
         }
         function cinella(){
             location.href=direccionW
+        }
+        function registrar(){
+            location.href=direccionW+"/Registro"
+        }
+        function contactenos(){
+            var contener=document.querySelector("#informacion")
+            contener.innerHTML=`
+            <h2>Siguenos en:</h2>
+            <div style="float: left;">
+            <ul id="barra" class="barra">
+                <li><a><i class="fab fa-facebook"></i> Facebook</a></li>
+                <li><a><i class="fab fa-instagram"></i> Intagram</a></li>
+                <li><a><i class="fab fa-twitter"></i> Twitter</a></li>
+                <li><a><i class="fab fa-youtube"></i> Youtube</a></li>
+            </ul>
+            </div>`
         }
     </script>
 </body>

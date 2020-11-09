@@ -24,8 +24,12 @@
     <p></p>
     
     <hr>
-    &emsp;&emsp;&emsp;<a class="recuperarContraseña" href="">¿Olvidaste tu contraseña?</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    &emsp;&emsp;&emsp;<a class="recuperarContraseña"  onclick="recuperar()">¿Olvidaste tu contraseña?</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
     <a class="crearCuenta" onclick="Registrar()">¿No tienes cuenta? Crea una cuenta</a>
+
+
+    <div id="recuperar"></div>
+
 </div>
 <div id="mostrar"></div>
 
@@ -33,7 +37,7 @@
 <script>
 
         var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
-		var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend    
+		var direccionW="http://localhost:5000" //Aqui es la direccion del Frontend    
     function Iniciar(){
         var usuario=document.querySelector('#User').value
         var contraseña=document.querySelector('#Contraseña').value
@@ -41,7 +45,7 @@
             'usuario':usuario,
             'contraseña':contraseña
         }
-        console.log(datos)
+                
         fetch(direccion+'/IniciarSesion/',{
             method:'POST',
             body: JSON.stringify(datos),
@@ -59,12 +63,12 @@
             else{
                 alert(`Bienvenido ${usuario}`)
                 sessionStorage.setItem("usuario",usuario)
-                var a="admin";
-                if(usuario==a){
-                    location.href=direccionW+"Admin"
+                
+                if(resp.tipo=="administrador"){
+                    location.href=direccionW+"/Admin"
                 }
-                if(usuario!="admin"){
-                    location.href=direccionW+"Cliente"
+                if(resp.tipo=="Cliente"){
+                    location.href=direccionW+"/Cliente"
                 }
             }
         })
@@ -72,7 +76,40 @@
     }
 
     function Registrar(){
-        location.href=direccionW+"Registro"
+        location.href=direccionW+"/Registro"
+    }
+
+    function recuperar(){
+        var contener=document.querySelector("#mostrar")
+        contener.innerHTML=`
+        <label>Ingrese su usuario para poder recuperar sus contraseña</label>
+        <input type="text" id="usuario" name="Usuario" size="100" maxlength="200" placeholder="Usuario" class="Usuario" ><br><br><br>
+        <a class="botonInicio" onclick="mostrarcontra()">Recuperar Contraseña</a>`
+    }
+    function mostrarcontra(){
+        var user=document.querySelector("#usuario").value
+        var dato={
+            'usuario':user
+        }
+        fetch(direccion+'/Recuperar',{
+            method:'POST',
+            body: JSON.stringify(dato),
+            headers: {
+            'Content-type':'application/json'
+            }
+        })
+        .then(respuesta=>respuesta.json())
+        .catch(error=>{
+            alert("Datos erroneos")
+        })
+        .then(resp=>{
+            if(resp.mensaje=="correcto"){
+                alert(`Su contraseña es: ${resp.contraseña}`)
+                var contenedor=document.querySelector("#mostrar")
+                contenedor.innerHTML=""
+            }
+            
+        })
     }
         
 </script>

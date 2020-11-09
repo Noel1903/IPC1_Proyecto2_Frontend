@@ -224,6 +224,21 @@ label{
   border-radius: 20px;
   color: white;
 }
+.Perfil{
+  align-content: center;
+  text-align: center;
+  margin: auto;
+}
+.modificar{
+			background-color: green;
+  border: black;
+  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  border-radius: 3px;
+		}
+
 </style>
 </head>
 <body>
@@ -232,16 +247,13 @@ label{
     <div class="sidebar">
        <h2> <img src="{{url_for('static',filename='Logo.JPG')}}" height="50" width="50">CINELLA</h2>
         <ul>
-          <li>
-            <span class="icon"><i class="fa fa-search"></i></span>
-            <input type="search" id="search" placeholder="Search..." size="30" style="height: 30px;" onkeyup="if(event.keyCode==13) funcion()"/>
-          </li>
+          
             <li onclick="peliculas()" ><a href="#" ><i class="fas fa-photo-video"></i>Peliculas</a></li>
             <li onclick="reseñas()"><a href="#"><i class="fas fa-comment"></i>Reseñas</a></li>
             <li onclick="funciones()"><a href="#"><i class="fas fa-ticket-alt"></i>Funciones</a></li>
             <li onclick="usuarios()" id="usuarios"><a href="#"><i class="fas fa-users"></i>Usuarios</a></li>
             <li onclick="registrar()"><a href="#"><i class="fas fa-user-plus"></i>Registrar Usuario</a></li>
-            <li><a href="#"><i class="fas fa-user-circle"></i>Perfil</a></li>
+            <li onclick="perfil()"><a href="#"><i class="fas fa-user-circle"></i>Perfil</a></li>
             <li onclick="cerrar()"><a href="#"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a></li>
         </ul> 
         <div class="social_media">
@@ -260,7 +272,7 @@ label{
   <div id="Agregar1" class="Agregar1" >
     
   </div>
-
+  <div id="Perfil" class="Perfil"></div>
 
  
  
@@ -273,6 +285,8 @@ label{
   }
   
   function peliculas(){
+    var conte=document.querySelector("#Perfil")
+    conte.innerHTML=""
     var agregar=document.querySelector("#Agregar")
     var contenedor=document.querySelector("#Agregar1")
     contenedor.innerHTML=""
@@ -295,6 +309,8 @@ label{
     
   }
   function reseñas(){
+    var conte=document.querySelector("#Perfil")
+    conte.innerHTML=""
     var agregar=document.querySelector("#Agregar")
     var contenedor=document.querySelector("#Agregar1")
     agregar.innerHTML="<br><center><h1>Reseñas</h1></center><br>"
@@ -319,6 +335,8 @@ label{
 
   }
   function funciones(){
+    var conte=document.querySelector("#Perfil")
+    conte.innerHTML=""
     var agregar=document.querySelector("#Agregar")
     agregar.innerHTML=`<br><center><h1>Funciones de películas</h1></center><br>
     <label>Pelicula:</label><input type="text" class="caja" id="Pelicula"><br>
@@ -344,11 +362,29 @@ label{
         contener.innerHTML+=`<tr>
         <td>${resp[i].pelicula}</td>
         <td>${estado}</td>
-        <td><button class="x">X</button></td></tr>`
+        <td><button class="x" onclick="eliminarF('${resp[i].pelicula}','${resp[i].hora}')" >X</button></td></tr>`
 
       }
     })
   }
+
+  function eliminarF(pelicula,hora){
+    fetch(direccion+`/Eliminar/${pelicula}/${hora}`,{
+      method:'DELETE',
+    })
+    .then(respuesta=>respuesta.json())
+    .catch(err=>{
+      console.log("Error")
+    })
+    .then(resp=>{
+      if(resp.mensaje=="correcto"){
+        alert("Función Eliminada Correctamente")
+        window.onload=funciones()
+
+      }
+    })
+  }
+
   function crearfuncion(){
     var contener=document.querySelector("#funciones")
     var pelicula=document.querySelector("#Pelicula").value
@@ -384,13 +420,15 @@ label{
         contener.innerHTML+=`<tr>
         <td>${pelicula}</td>
         <td>${estado}</td>
-        <td><button class="x">X</button></td></tr>`
+        <td><button class="x" onclick="eliminarF('${pelicula}','${hora}')">X</button></td></tr>`
        
       }
       
     })
   }
   function usuarios(){
+    var conte=document.querySelector("#Perfil")
+    conte.innerHTML=""
     var agregar=document.querySelector("#Agregar")
     var tablaU="<br><center><h1>Usuarios</h1></center><br>"
     tablaU+="<button class='button' id='button'>Generar Reporte en PDF</button>"
@@ -421,9 +459,65 @@ label{
     contenedor.innerHTML=""
 
   }
+
+
   function registrar(){
-    alert("El usuario que va crear va ser un Administrador")
+    var contenedor=document.querySelector("#Perfil")
+    var c=document.querySelector("#Agregar")
+    c.innerHTML=""
+    contenedor.innerHTML=`
+    <label>Nombre:</label><br><input  id="Nombre" type='text'  style='height: 50px; font-size:25px;' placeholder="Nombre"><br>
+				<label>Apellido:</label><br><input type='text' id="Apellido"  style='height: 50px; font-size:25px;' placeholder="Apellido" ><br>
+				<label>Usuario:</label><br><input type='text' id="Usuario"  style='height: 50px; font-size:25px;' placeholder="Usuario"><br>
+				<label>Contraseña:</label><br><input type='password' id="Contraseña" style='height: 50px; font-size:25px;' placeholder="Contraseña"><br>
+				<label>Confirmar Contraseña:</label><br><input type='password' id="ConfContra" style='height: 50px; font-size:25px;' placeholder=" Confirmar Contraseña"><br>
+        <button class="modificar" onclick="nuevoAdmin()">Crear</button>`
+
   }
+  function nuevoAdmin(){
+    var nombre=document.querySelector('#Nombre').value
+            var apellido=document.querySelector('#Apellido').value
+            var usuario=document.querySelector('#Usuario').value
+            var contraseña=document.querySelector('#Contraseña').value
+            var confircontraseña=document.querySelector('#ConfContra').value
+            if(contraseña!=confircontraseña){
+                alert('La contraseña no es igual')
+            }
+            else{
+                var datos={
+                'nombre':nombre,
+                'apellido':apellido,
+                'usuario':usuario,
+                'contraseña':contraseña,
+                'tipo':'administrador'
+                }
+                console.log(datos)
+                fetch(direccion+'/Registrar/',{
+                    method:'POST',
+                    body:JSON.stringify(datos),
+                    headers:{
+                    'Content-type':'application/json'
+                    }
+                })
+                .then(respuesta=>respuesta.json())
+                .catch(err=>{
+                    console.log("Error")
+                })
+                .then(resp=>{
+                    if(resp.mensaje=="Correcto"){
+                        alert("Usuario registrado corrrectamente")
+                        
+                    }
+                    else{
+                        alert("Este usuario ya existe")
+                    }
+                })
+
+            }
+  }
+
+
+
   function CargarPeliculas(){
     $('#files').parse({
 		config: {
@@ -499,12 +593,168 @@ label{
           <th>${resp[i].titulo}</th>
           <th>${resp[i].puntuacion}</th>
           <th>${resp[i].duracion}</th>
-          <th><button class='Editar'>Editar</button></th>
-          <th><button class='Eliminar'>X</button></th>
+          <th><button class='Editar' onclick="modificarP('${resp[i].titulo}')">Editar</button></th>
+          <th><button class='Eliminar' onclick="eliminar('${resp[i].titulo}')">X</button></th>
           </tr>`
           }
         })
   }
+  function eliminar(pelicula){
+    fetch(direccion+`/Eliminar/${pelicula}`,{
+      method:'DELETE',
+    })
+    .then(respuesta=>respuesta.json())
+    .catch(err=>{
+      console.log("Error")
+    })
+    .then(resp=>{
+      if(resp.mensaje=="correcto"){
+        alert("Pelicula Eliminada Correctamente")
+        window.onload=peliculas()
+
+      }
+    })
+  }
+
+
+  function modificarP(titulo){
+    var contener=document.querySelector("#Agregar")
+    var dato={
+      'titulo':titulo
+    }
+    fetch(direccion+'/Cartelera/Ver',{
+      method:'POST',
+      body:JSON.stringify(dato),
+      headers:{
+        'Content-type':'application/json'
+      }
+    })
+    .then(respuesta=>respuesta.json())
+    .catch(error=>{
+      console.log("Error")
+    })
+    .then(resp=>{
+      contener.innerHTML=`
+    <h1>Modificando Película: ${titulo}</h1>
+    <br>
+    <label>Nombre de la película:</label><br>
+    <input class="caja" id="nombre" value="${resp.titulo}"><br>
+    <label>Url de imagen:</label><br>
+    <input class="caja" id="url" value="${resp.url}"><br>
+    <label>Puntuación  */10:</label><br>
+    <input class="caja" id="puntuacion" value="${resp.puntuacion}"><br>
+    <label>Duración:</label><br>
+    <input class="caja" id="duracion" value="${resp.duracion}"><br>
+    <label>Sinopsis:</label><br>
+    <input class="caja" id="sinopsis" value="${resp.sinopsis}"><br>
+    <button class="Editar" onclick="editar('${titulo}')">Editar</button>
+    <button>Regresar</button>`
+
+    })
+    
+
+
+    
+
+  }
+  function editar(titulo){
+    var pelicula=document.querySelector("#nombre").value
+    var url=document.querySelector("#url").value
+    var puntuacion=document.querySelector("#puntuacion").value
+    var duracion=document.querySelector("#duracion").value
+    var sinopsis=document.querySelector("#sinopsis").value
+    var datos={
+      'titulo':titulo,
+      'tituloN':pelicula,
+      'url':url,
+      'puntuacion':puntuacion,
+      'duracion':duracion,
+      'sinopsis':sinopsis
+    }
+
+    fetch(direccion+'/Modificar',{
+      method:'POST',
+      body:JSON.stringify(datos),
+      headers:{
+        'Content-type':'application/json'
+      }
+    })
+    .then(respuesta=>respuesta.json())
+    .catch(err=>{
+      console.log("Error al modificar pelicula")
+    })
+    .then(resp=>{
+      if(resp.mensaje=="correcto"){
+        alert("Pelicula modificada correctamente")
+      }
+    })
+  }
+
+  function perfil(){
+    var user=sessionStorage.usuario
+		var contener=document.querySelector("#Perfil")	
+    var cont=document.querySelector("#Agregar")
+    cont.innerHTML=""
+			var perfil={
+				'usuario':user
+			}
+			
+			fetch(direccion+'/verUsuario',{
+				method:'POST',
+          		body: JSON.stringify(perfil),
+         		headers:{
+           			'Content-type':'application/json'
+          		}
+			})
+			.then(respuesta=>respuesta.json())
+			.catch(error=>{
+				alert("Hubo un error de mostrar el usuario")
+			})
+			.then(res=>{
+				contener.innerHTML=`
+				<table style="margin:auto;"><tr><td><img src='https://w7.pngwing.com/pngs/930/532/png-transparent-computer-icons-personal-web-page-user-name-icon-monochrome-user-tag.png' width='400px' height='400px'></td>
+				<td><section><label>Nombre:</label><br><input  id="nombre" type='text' value=${res.nombre} style='height: 50px; font-size:25px;'><br>
+				<label>Apellido:</label><br><input type='text' id="apellido" value=${res.apellido} style='height: 50px; font-size:25px;'><br>
+				<label>Usuario:</label><br><input type='text' id="usuario" value=${res.usuario} style='height: 50px; font-size:25px;'><br>
+				<label>Contraseña:</label><br><input type='text' id="contraseña" value=${res.contraseña} style='height: 50px; font-size:25px;'><br>
+				<button class="modificar" onclick="modificar('${res.usuario}')">Modificar</button></section>
+				</td></tr></table>`
+			})
+  }
+
+  function modificar(usuario){
+			var nombre=document.querySelector("#nombre").value
+			var apellido=document.querySelector("#apellido").value
+			var usuarioN=document.querySelector("#usuario").value
+			var contraseña=document.querySelector("#contraseña").value
+			var datos={
+				'usuario':usuario,
+				'nombre':nombre,
+				'apellido':apellido,
+				'usuarioN':usuarioN,
+				'contraseña':contraseña
+			}
+			fetch(direccion+'/Modificarperfil',{
+				method:'POST',
+          		body: JSON.stringify(datos),
+         		headers:{
+           			'Content-type':'application/json'
+          		}
+			})
+			.then(respuesta=>respuesta.json())
+			.catch(err=>{
+				console.log("Hubo un error")
+			})
+			.then(resp=>{
+				if(resp.mensaje=="correcto"){
+					alert("Perfil modificado correctamente")
+					sessionStorage.setItem("usuario",usuarioN)
+				}
+				if(resp.mensaje=="Error"){
+					alert("Este usuario ya esta usado")
+				}
+			})
+		}
 
   function cerrar(){
     location.href=direccionW

@@ -17,13 +17,13 @@
     <input type="password" id ="ConfContra" size="46" maxlength="200" placeholder="Confirmar Contraseña"  class="Apellido" ><p></p>
     <a class="Registrar"  onclick="Registrar()">Registrar Usuario</a><p></p>
     </form><hr>
-    <a class="IniciarSesion" onclick="Iniciar()" href="">Si tiene cuenta creada, inicie sesión</a>
+    <a class="IniciarSesion" onclick="Iniciar()" >Si tiene cuenta creada, inicie sesión</a>
     </div>
     
 
     <script>
         var direccion="http://localhost:3000" //Aqui esta la direccion para cambiarla a Heroku de backend
-		var direccionW="http://localhost:5000/" //Aqui es la direccion del Frontend
+		var direccionW="http://localhost:5000" //Aqui es la direccion del Frontend
         function Registrar(){
             var nombre=document.querySelector('#Nombre').value
             var apellido=document.querySelector('#Apellido').value
@@ -38,7 +38,8 @@
                 'nombre':nombre,
                 'apellido':apellido,
                 'usuario':usuario,
-                'contraseña':contraseña
+                'contraseña':contraseña,
+                'tipo':'Cliente'
                 }
                 console.log(datos)
                 fetch(direccion+'/Registrar/',{
@@ -48,15 +49,24 @@
                     'Content-type':'application/json'
                     }
                 })
-                .then(respuesta=>{
-                    alert(`Usuario Registrado Correctamente`)
-                    location.href=direccionW+"Login"
+                .then(respuesta=>respuesta.json())
+                .catch(err=>{
+                    console.log("Error")
+                })
+                .then(resp=>{
+                    if(resp.mensaje=="Correcto"){
+                        alert("Usuario registrado corrrectamente")
+                        location.href=direccionW+"/Login"
+                    }
+                    else{
+                        alert("Este usuario ya existe")
+                    }
                 })
 
             }
             }
             function Iniciar(){
-                location.href=direccionW+"Login";
+                location.href=direccionW+"/Login";
             }
             
      
