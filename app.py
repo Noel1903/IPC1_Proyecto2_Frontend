@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask_cors import CORS
+import os
 app=Flask(__name__)
 CORS(app)
 @app.route('/')
@@ -24,4 +25,6 @@ def cliente():
     return render_template('InterfazClient.html')  
 
 if  __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0',port=5000)
+    puerto=int(os.environ.get('PORT',5000))
+    app.run(host='0.0.0.0',port=puerto)
+    
